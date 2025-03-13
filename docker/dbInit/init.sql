@@ -1,0 +1,23 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    subscription_status VARCHAR(50) DEFAULT 'free',  -- free, basic, pro, agency
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE competitors (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    url TEXT NOT NULL,
+    last_scraped_data TEXT,  -- Stores raw HTML or structured JSON
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE price_changes (
+    id SERIAL PRIMARY KEY,
+    competitor_id INT REFERENCES competitors(id) ON DELETE CASCADE,
+    detected_change TEXT NOT NULL,  -- Example: "Pro Plan: $49 → $59"
+    ai_summary TEXT,  -- OpenAI-generated summary
+    created_at TIMESTAMP DEFAULT NOW()
+);
