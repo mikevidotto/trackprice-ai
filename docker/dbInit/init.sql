@@ -18,6 +18,6 @@ CREATE TABLE price_changes (
     id SERIAL PRIMARY KEY,
     competitor_id INT REFERENCES competitors(id) ON DELETE CASCADE,
     detected_change TEXT NOT NULL,  -- Example: "Pro Plan: $49 → $59"
-    ai_summary TEXT,  -- OpenAI-generated summary
+    ai_summary TEXT,  -- OpenAI-generated summary (NULL initially)
     created_at TIMESTAMP DEFAULT NOW()
 );

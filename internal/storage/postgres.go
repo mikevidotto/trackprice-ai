@@ -1,29 +1,39 @@
 package storage
 
 import (
+	"TrackPriceAI/internal/models"
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
+	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"github.com/mikevidotto/blogfolio/internal/article"
 )
 
 type MypostgresStorage struct {
 	db *sql.DB
 }
 
-type MypostgresConfig struct {
-	Username string
-	Password string
-	DbName   string
-	Port     uint
-	Host     string
-}
+// type MypostgresConfig struct {
+// 	Username string
+// 	Password string
+// 	DbName   string
+// 	Port     uint
+// 	Host     string
+// }
 
-func NewMypostgresStorage(conf MypostgresConfig) (MypostgresStorage, error) {
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", conf.Username, conf.Password, conf.Host, conf.Port, conf.DbName)
-	db, err := sql.Open("postgres", connStr)
+func NewMypostgresStorage() (MypostgresStorage, error) {
+	// Reload .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("❌ Error loading .env file")
+	}
+
+	dbURL := os.Getenv("DATABASE_URL")
+	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		return MypostgresStorage{}, fmt.Errorf("cannot open postgres connection: %w", err)
 	}
@@ -36,66 +46,113 @@ func NewMypostgresStorage(conf MypostgresConfig) (MypostgresStorage, error) {
 	}, nil
 }
 
-func (s MypostgresStorage) Create(ctx context.Context, a article.Article) (article.Article, error) {
-	query := `insert into articles (author, title, body, markdown, html, published)
-	VALUES ($1, $2, $3, $4, $5, $6)
-	RETURNING id`
-	err := s.db.QueryRowContext(ctx, query, a.Author, a.Title, a.Body, a.Markdown, a.Html, a.Published).Scan(&a.Id)
+// Create a new user
+func (s *MypostgresStorage) CreateUser(ctx context.Context, user models.User) (models.User, error) {
+	query := "INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, created_at"
+	err := s.db.QueryRowContext(ctx, query, user.Email, user.Password).Scan(&user.ID, &user.CreatedAt)
 	if err != nil {
-		fmt.Errorf("cannot create article: %w", err)
+		return models.User{}, err
 	}
-	return a, nil
+	return user, nil
 }
 
-func (s MypostgresStorage) Read(ctx context.Context) ([]article.Article, error) {
-	var articles []article.Article
-	var a article.Article
-	query := "SELECT id, author, title, body, markdown, html, published FROM articles"
-	rows, err := s.db.QueryContext(ctx, query)
+// Fetch user by email
+func (s *MypostgresStorage) GetUserByEmail(ctx context.Context, email string) (models.User, error) {
+	var user models.User
+	query := "SELECT id, email, password_hash, created_at FROM users WHERE email = $1"
+	err := s.db.QueryRowContext(ctx, query, email).Scan(&user.ID, &user.Email, &user.Password, &user.CreatedAt)
 	if err != nil {
-		fmt.Errorf("cannot retrieve articles from db: %w", err)
+		if errors.Is(err, sql.ErrNoRows) {
+			return models.User{}, errors.New("user not found")
+		}
+		return models.User{}, err
+	}
+	return user, nil
+}
+
+// Track a new competitor
+func (s *MypostgresStorage) TrackCompetitor(ctx context.Context, userID int, url string) error {
+	//right now this method just adds a competitor to the competitors table in the database for a specific userID
+	query := "INSERT INTO competitors (user_id, url) VALUES ($1, $2)"
+	_, err := s.db.ExecContext(ctx, query, userID, url)
+	return err
+}
+
+// List tracked competitors for a user
+func (s *MypostgresStorage) GetTrackedCompetitors(ctx context.Context, userID int) ([]models.Competitor, error) {
+	query := "SELECT id, url FROM competitors WHERE user_id = $1"
+	rows, err := s.db.QueryContext(ctx, query, userID)
+	if err != nil {
+		return nil, err
 	}
 	defer rows.Close()
+
+	var competitors []models.Competitor
 	for rows.Next() {
-		err := rows.Scan(&a.Id, &a.Author, &a.Title, &a.Body, &a.Markdown, &a.Html, &a.Published)
-		if err != nil {
-			fmt.Errorf("cannot scan from rows: %w", err)
+		var c models.Competitor
+		rows.Scan(&c.ID, &c.URL)
+		competitors = append(competitors, c)
+	}
+	return competitors, nil
+}
+
+// Save scraped data
+func (s *MypostgresStorage) SaveScrapedData(ctx context.Context, competitorID int, data string) error {
+	_, err := s.db.ExecContext(ctx, "UPDATE competitors SET last_scraped_data = $1 WHERE id = $2", data, competitorID)
+	return err
+}
+
+// Detect price changes
+func (s *MypostgresStorage) DetectPriceChanges(ctx context.Context, competitorID int, newData string) (models.PriceChange, error) {
+	var oldData sql.NullString
+	query := "SELECT last_scraped_data FROM competitors WHERE id = $1"
+	err := s.db.QueryRowContext(ctx, query, competitorID).Scan(&oldData)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// No previous data found (shouldn't happen, but safe check)
+			return models.PriceChange{}, nil
 		}
-		articles = append(articles, a)
-		// fmt.Printf("%d - %s - %s - %s\n", a.Id, a.Author, a.Title, a.Body, a.Published)
+		return models.PriceChange{}, err
 	}
-	err = rows.Err()
+
+	if !oldData.Valid {
+		// Store new data and return without detecting a change
+		_, err := s.db.ExecContext(ctx, "UPDATE competitors SET last_scraped_data = $1 WHERE id = $2", newData, competitorID)
+		if err != nil {
+			return models.PriceChange{}, err
+		}
+		fmt.Println("✅ First-time scrape. Data saved.")
+		return models.PriceChange{}, nil
+	}
+
+	// Compare old vs. new data
+	if oldData.String == newData {
+		return models.PriceChange{}, nil // No change detected
+	}
+
+	detectedChange := fmt.Sprintf("Price changed: %s → %s", oldData.String, newData)
+
+	// Store change in price_changes table
+	query = "INSERT INTO price_changes (competitor_id, detected_change) VALUES ($1, $2) RETURNING id, created_at"
+	var change models.PriceChange
+	err = s.db.QueryRowContext(ctx, query, competitorID, detectedChange).Scan(&change.ID, &change.CreatedAt)
 	if err != nil {
-		fmt.Errorf("cannot check for errors in rows.... %w", err)
+		return models.PriceChange{}, err
 	}
-	return articles, err
+
+	// Update last_scraped_data
+	query = "UPDATE competitors SET last_scraped_data = $1 WHERE id = $2"
+	_, err = s.db.ExecContext(ctx, query, newData, competitorID)
+	if err != nil {
+		return models.PriceChange{}, err
+	}
+
+	change.DetectedChange = detectedChange
+	return change, nil
 }
 
-func (s MypostgresStorage) FindArticle(ctx context.Context, id int64) (article.Article, error) {
-	var a article.Article
-	query := "SELECT id, author, title, body, markdown, html, published FROM articles WHERE id = $1"
-	row := s.db.QueryRowContext(ctx, query, id)
-	err := row.Scan(&a.Id, &a.Author, &a.Title, &a.Body, &a.Markdown, &a.Html, &a.Published)
-	if err != nil {
-		fmt.Errorf("cannot scan row.. %w", err)
-	}
-	return a, nil
-}
-
-func (s MypostgresStorage) Update(ctx context.Context, a article.Article) (article.Article, error) {
-	query := "UPDATE articles SET body = $1 WHERE id = $2"
-	err := s.db.QueryRowContext(ctx, query, a.Body, a.Id)
-	if err != nil {
-		fmt.Errorf("cannot update article: %w", err)
-	}
-	return a, nil
-}
-
-func (s MypostgresStorage) Delete(ctx context.Context, id int64) error {
-	query := "DELETE FROM articles WHERE id = $1"
-	err := s.db.QueryRowContext(ctx, query, id)
-	if err != nil {
-		fmt.Errorf("cannot delete record from table: %w", err)
-	}
-	return nil
+// Store AI-generated summary
+func (s *MypostgresStorage) StoreAIInsights(ctx context.Context, changeID int, summary string) error {
+	_, err := s.db.ExecContext(ctx, "UPDATE price_changes SET ai_summary = $1 WHERE id = $2", summary, changeID)
+	return err
 }

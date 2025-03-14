@@ -2,7 +2,13 @@ module TrackPriceAI
 
 go 1.22.4
 
-require github.com/gofiber/fiber/v2 v2.52.6
+require (
+	github.com/go-resty/resty/v2 v2.16.5
+	github.com/gofiber/fiber/v2 v2.52.6
+	github.com/joho/godotenv v1.5.1
+	github.com/lib/pq v1.10.9
+	github.com/sashabaranov/go-openai v1.38.0
+)
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
@@ -15,5 +21,6 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 )

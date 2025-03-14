@@ -1,14 +1,18 @@
 package storage
 
 import (
+	"TrackPriceAI/internal/models"
 	"context"
-
-	"github.com/mikevidotto/blogfolio/internal/article"
 )
 
 type Storage interface {
-	Create(ctx context.Context, a article.Article) (article.Article, error)
-	Read(ctx context.Context) ([]article.Article, error)
-	Update(ctx context.Context, a article.Article) (article.Article, error)
-	Delete(ctx context.Context, id int64) error
+	// User Management
+	CreateUser(ctx context.Context, user models.User) (models.User, error)
+	GetUserByEmail(ctx context.Context, email string) (models.User, error)
+
+	TrackCompetitor(ctx context.Context, userID int, url string) error
+	GetTrackedCompetitors(ctx context.Context, userID int) ([]models.Competitor, error)
+	SaveScrapedData(ctx context.Context, competitorID int, data string) error
+	DetectPriceChanges(ctx context.Context, competitorID int) (models.PriceChange, error)
+	StoreAIInsights(ctx context.Context, changeID int, summary string) error
 }

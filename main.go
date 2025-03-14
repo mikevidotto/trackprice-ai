@@ -1,6 +1,7 @@
 package main
 
 import (
+	"TrackPriceAI/internal/handlers"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -25,34 +26,32 @@ func main() {
 	app := fiber.New()
 
 	// Authentication Routes
-	app.Post("/signup", signUpHandler)
-	app.Post("/login", loginHandler)
+	app.Post("/signup", handlers.SignUpHandler)
+	app.Post("/login", handlers.LoginHandler)
 
 	// Competitor Tracking Routes
-	app.Post("/track", trackCompetitorHandler)
-	app.Get("/tracked", listTrackedCompetitorsHandler)
+	app.Post("/track", handlers.TrackCompetitorHandler)
+	app.Get("/tracked", handlers.ListTrackedCompetitorsHandler)
 
 	// Scraping & AI Summarization
-	app.Post("/scrape", scrapeHandler)
-	app.Get("/changes", getChangesHandler)
-	app.Post("/summarize", summarizeHandler)
+	app.Post("/scrape", handlers.ScrapeHandler)
+	app.Get("/changes", handlers.GetChangesHandler)
+	app.Post("/summarize", handlers.SummarizeHandler)
 
 	// Subscription Handling
-	app.Post("/subscribe", subscribeHandler)
-
-	app.Listen(":8080")
+	app.Post("/subscribe", handlers.SubscribeHandler)
+	// test_db()
+	// test_users()
+	// test_competitors()
+	// test_price_changes()
+	test_scraper()
+	err := app.Listen(":8085")
+	if err != nil {
+		panic(err)
+	}
 }
 
-func signUpHandler(c *fiber.Ctx) error                 {}
-func loginHandler(c *fiber.Ctx) error                  {}
-func trackCompetitorHandler(c *fiber.Ctx) error        {}
-func listTrackedCompetitorsHandler(c *fiber.Ctx) error {}
-func scrapeHandler(c *fiber.Ctx) error                 {}
-func getChangesHandler(c *fiber.Ctx) error             {}
-func summarizeHandler(c *fiber.Ctx) error              {}
-func subscribeHandler(c *fiber.Ctx) error              {}
-
-func summarizePriceChange(priceChange string) (string, error) {
+func SummarizePriceChange(priceChange string) (string, error) {
 	apiKey := os.Getenv("OPENAI_API_KEY")
 	prompt := fmt.Sprintf("Summarize the following competitor price change for a business user: %s", priceChange)
 
