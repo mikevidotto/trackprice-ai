@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: TrackPriceAiUser
+      POSTGRES_PASSWORD: trackpriceai
+      POSTGRES_DB: TrackPriceAiDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - "./docker/dbInit:/docker-entrypoint-initdb.d"
