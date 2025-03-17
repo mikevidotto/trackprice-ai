@@ -8,5 +8,7 @@ services:
       POSTGRES_DB: TrackPriceAiDb
     ports:
       - "5432:5432"
+    env_file:
+            - .env
     volumes:
       - "./docker/dbInit:/docker-entrypoint-initdb.d"

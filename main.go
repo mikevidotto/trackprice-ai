@@ -6,23 +6,27 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/mikevidotto/trackprice-ai/internal/ai"
 	"github.com/mikevidotto/trackprice-ai/internal/scraper"
 	"github.com/mikevidotto/trackprice-ai/internal/storage"
-	"github.com/mikevidotto/trackprice-ai/routes"
 
-	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
+	"github.com/mikevidotto/trackprice-ai/config"
 )
 
 func main() {
 	// Load environment variables
-	err := godotenv.Load()
+	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	// err = os.Setenv("JWT_SECRET_KEY", "J8Vmi1AuK8rluaK62oQp8zMHx3DjJq1CSkPLM5+AybH/MslOuuANzFJyyrtO6GhwYnzZhWjBrKoquINAYSAiCQ==")
+	// if err != nil {
+	// 	log.Fatal("error setting env variable JWT_SECRET_KEY", err)
+	// }
 
 	// Connect to database
 	dbURL := os.Getenv("DATABASE_URL")
@@ -32,52 +36,51 @@ func main() {
 	}
 	defer db.Close()
 
-	store, err := storage.NewMypostgresStorage()
-	if err != nil {
-		log.Fatal("❌ Error initializing storage:", err)
-	}
+	// store, err := storage.NewMypostgresStorage()
+	// if err != nil {
+	// 	log.Fatal("❌ Error initializing storage:", err)
+	// }
 
-	// Initialize Fiber
-	app := fiber.New()
+	// // Competitor URLs to scrape
+	// urls := []string{
+	// 	"https://instantly.ai/pricing",
+	// 	"https://grammarly.com/plans",
+	// }
 
-	// Register API routes
-	routes.SetupRoutes(app, &store)
+	// // ✅ Start Scraper in a Separate Goroutine
+	// go func() {
+	// 	fmt.Println("🔄 Running initial scraper...")
+	// 	runScraper(&store, urls)
 
-	// Start the server
+	// 	// Schedule scraper to run every 24 hours
+	// 	ticker := time.NewTicker(24 * time.Hour)
+	// 	defer ticker.Stop()
+
+	// 	for {
+	// 		select {
+	// 		case <-ticker.C:
+	// 			fmt.Println("🔄 Running scheduled scraper...")
+	// 			runScraper(&store, urls)
+	// 		}
+	// 	}
+	// }()
+
+	// Start Fiber server from `server.go`
+	app := config.InitializeServer()
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8085"
 	}
+
+	// ✅ Start the API Server (Main Thread)
 	fmt.Println("🚀 Server running on port", port)
 	log.Fatal(app.Listen(":" + port))
 
-	fmt.Println("yo yo ma")
-
-	// Competitor URLs to scrape
-	urls := []string{
-		"https://instantly.ai/pricing",
-		"https://grammarly.com/plans",
-	}
-
-	// Run scraper immediately once
-	runScraper(&store, urls)
-
-	// Schedule scraper to run every 24 hours
-	ticker := time.NewTicker(24 * time.Hour)
-	defer ticker.Stop()
-
-	for {
-		select {
-		case <-ticker.C:
-			runScraper(&store, urls)
-		}
-	}
 }
 
-// runScraper scrapes, extracts, and stores pricing data
+// runScraper executes the scraper, extracts data, and stores pricing info
 func runScraper(db *storage.MypostgresStorage, urls []string) {
-	ctx := context.Background()
-
 	for _, url := range urls {
 		fmt.Println("🔄 Scraping:", url)
 
@@ -96,7 +99,7 @@ func runScraper(db *storage.MypostgresStorage, urls []string) {
 		}
 
 		// Store structured pricing in database
-		err = db.SavePricingData(ctx, url, pricingData)
+		err = db.SavePricingData(context.Background(), url, pricingData)
 		if err != nil {
 			log.Println("❌ Failed to store pricing for", url, ":", err)
 		} else {

@@ -14,7 +14,7 @@ import (
 )
 
 // JWTSecretKey loads from environment variables
-var JWTSecretKey = []byte(os.Getenv("JWT_SECRET_KEY"))
+var JWTSecretKey = os.Getenv("JWT_SECRET_KEY")
 
 // User represents a user in the system
 type User struct {
@@ -75,6 +75,8 @@ func AuthenticateUser(ctx context.Context, db *storage.MypostgresStorage, email,
 
 // generateJWT creates a signed JWT token for the user
 func generateJWT(user User) (string, error) {
+	fmt.Println("🔍 Debugging: Using JWT Secret →", os.Getenv("JWT_SECRET_KEY")) // Debug line
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id":             user.ID,
 		"email":               user.Email,
@@ -82,5 +84,5 @@ func generateJWT(user User) (string, error) {
 		"exp":                 time.Now().Add(24 * time.Hour).Unix(), // Token expires in 24 hours
 	})
 
-	return token.SignedString(JWTSecretKey)
+	return token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
 }

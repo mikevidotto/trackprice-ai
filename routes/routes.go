@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/mikevidotto/trackprice-ai/internal/auth"
 	"github.com/mikevidotto/trackprice-ai/internal/handlers"
+	"github.com/mikevidotto/trackprice-ai/internal/middleware"
 	"github.com/mikevidotto/trackprice-ai/internal/storage"
 
 	"github.com/gofiber/fiber/v2"
@@ -12,10 +13,11 @@ import (
 func SetupRoutes(app *fiber.App, db *storage.MypostgresStorage) {
 	app.Post("/signup", auth.SignUpHandler(db))
 	app.Post("/login", auth.LoginHandler(db))
-	app.Post("/track", handlers.TrackCompetitorHandler)
-	app.Get("/tracked", handlers.ListTrackedCompetitorsHandler)
-	app.Post("/scrape", handlers.ScrapeHandler)
-	app.Get("/changes", handlers.GetChangesHandler)
-	app.Post("/summarize", handlers.SummarizeHandler)
-	app.Post("/subscribe", handlers.SubscribeHandler)
+
+	// Protected routes (Require JWT authentication)
+	authRoutes := app.Group("/api", middleware.AuthMiddleware())
+	authRoutes.Post("/track", handlers.TrackCompetitorHandler)
+	authRoutes.Get("/tracked", handlers.ListTrackedCompetitorsHandler)
+	authRoutes.Get("/changes", handlers.GetChangesHandler)
+	authRoutes.Post("/subscribe", handlers.SubscribeHandler)
 }
