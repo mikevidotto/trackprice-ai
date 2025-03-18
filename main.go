@@ -23,11 +23,6 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	// err = os.Setenv("JWT_SECRET_KEY", "J8Vmi1AuK8rluaK62oQp8zMHx3DjJq1CSkPLM5+AybH/MslOuuANzFJyyrtO6GhwYnzZhWjBrKoquINAYSAiCQ==")
-	// if err != nil {
-	// 	log.Fatal("error setting env variable JWT_SECRET_KEY", err)
-	// }
-
 	// Connect to database
 	dbURL := os.Getenv("DATABASE_URL")
 	db, err := sql.Open("postgres", dbURL)

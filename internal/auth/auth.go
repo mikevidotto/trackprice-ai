@@ -19,7 +19,7 @@ var JWTSecretKey = os.Getenv("JWT_SECRET_KEY")
 // User represents a user in the system
 type User struct {
 	ID                 int       `json:"id"`
-	Email              string    `json:"email"`
+	Email              string    `json:"email"` 	
 	PasswordHash       string    `json:"-"`
 	SubscriptionStatus string    `json:"subscription_status"`
 	CreatedAt          time.Time `json:"created_at"`

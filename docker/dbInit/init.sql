@@ -6,12 +6,18 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS competitors (
+CREATE TABLE competitors (
+    id SERIAL PRIMARY KEY,
+    url TEXT UNIQUE NOT NULL,
+    last_scraped_data TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tracked_competitors (
     id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    url TEXT NOT NULL,
-    last_scraped_data TEXT,  -- Stores raw HTML or structured JSON
-    created_at TIMESTAMP DEFAULT NOW()
+    competitor_id INT REFERENCES competitors(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS price_changes (
@@ -19,7 +25,7 @@ CREATE TABLE IF NOT EXISTS price_changes (
     competitor_id INT REFERENCES competitors(id) ON DELETE CASCADE,
     detected_change TEXT NOT NULL,  -- Example: "Pro Plan: $49 → $59"
     ai_summary TEXT,  -- OpenAI-generated summary (NULL initially)
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS prices (
