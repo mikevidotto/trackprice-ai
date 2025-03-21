@@ -12,7 +12,7 @@ import (
 
 // AuthMiddleware protects routes using JWT authentication
 func AuthMiddleware() fiber.Handler {
-	secret := os.Getenv("JWT_SECRET_KEY")
+	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		fmt.Println("❌ JWT_SECRET is missing from .env file!")
 		os.Exit(1)

@@ -14,7 +14,7 @@ import (
 )
 
 // JWTSecretKey loads from environment variables
-var JWTSecretKey = os.Getenv("JWT_SECRET_KEY")
+var JWTSecretKey = os.Getenv("JWT_SECRET")
 
 // User represents a user in the system
 type User struct {
@@ -82,5 +82,5 @@ func generateJWT(user User) (string, error) {
 		"exp":                 time.Now().Add(24 * time.Hour).Unix(), // Token expires in 24 hours
 	})
 
-	return token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
+	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }

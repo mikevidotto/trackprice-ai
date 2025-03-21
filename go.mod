@@ -11,6 +11,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	github.com/sashabaranov/go-openai v1.38.0
+	github.com/sendgrid/sendgrid-go v3.16.0+incompatible
 	github.com/stripe/stripe-go/v81 v81.4.0
 	golang.org/x/crypto v0.36.0
 )
@@ -33,6 +34,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/saintfish/chardet v0.0.0-20230101081208-5e3ef4b5456d // indirect
+	github.com/sendgrid/rest v2.6.9+incompatible // indirect
 	github.com/temoto/robotstxt v1.1.2 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
