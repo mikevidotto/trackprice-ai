@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/mikevidotto/trackprice-ai/internal/ai"
 	"github.com/mikevidotto/trackprice-ai/internal/scraper"
 	"github.com/mikevidotto/trackprice-ai/internal/storage"
@@ -38,7 +39,6 @@ func main() {
 
 	// // Competitor URLs to scrape
 	// urls := []string{
-	// 	"https://instantly.ai/pricing",
 	// 	"https://grammarly.com/plans",
 	// }
 
@@ -62,6 +62,9 @@ func main() {
 
 	// Start Fiber server from `server.go`
 	app := config.InitializeServer()
+
+	// ✅ This will catch panics and prevent the app from crashing
+	app.Use(recover.New())
 
 	port := os.Getenv("PORT")
 	if port == "" {

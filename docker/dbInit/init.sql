@@ -2,6 +2,8 @@ CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
+    stripe_customer_id TEXT UNIQUE,
+    stripe_subscription_id TEXT UNIQUE,
     subscription_status VARCHAR(50) DEFAULT 'free',  -- free, basic, pro, agency
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

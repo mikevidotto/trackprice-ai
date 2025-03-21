@@ -1,8 +1,9 @@
 package storage
 
 import (
-	"github.com/mikevidotto/trackprice-ai/internal/models"
 	"context"
+
+	"github.com/mikevidotto/trackprice-ai/internal/models"
 )
 
 type Storage interface {

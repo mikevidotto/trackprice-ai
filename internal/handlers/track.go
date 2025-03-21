@@ -8,11 +8,31 @@ import (
 	"github.com/mikevidotto/trackprice-ai/internal/storage"
 )
 
+var planLimits = map[string]int{
+	"free":     3,   // Free users can track 3 competitors
+	"pro":      10,  // Pro users can track 10
+	"business": 100, // Business users get unlimited
+}
+
 // TrackCompetitorHandler allows users to track a competitor
 func TrackCompetitorHandler(db *storage.MypostgresStorage) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		user := c.Locals("user").(map[string]interface{})
 		userID := int(user["user_id"].(float64))
+		userPlan := user["subscription_status"].(string)
+
+		// Get current number of tracked competitors
+		var count int
+		err := db.DB.QueryRowContext(context.Background(), `SELECT COUNT(*) FROM tracked_competitors WHERE user_id = $1`, userID).Scan(&count)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to check competitor count"})
+		}
+
+		// Check if user has reached their plan limit
+		limit := planLimits[userPlan]
+		if count >= limit {
+			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "Competitor limit reached. Upgrade plan to track more."})
+		}
 
 		var data struct {
 			URL string `json:"url"`
@@ -23,7 +43,7 @@ func TrackCompetitorHandler(db *storage.MypostgresStorage) fiber.Handler {
 
 		var competitorID int
 		// ✅ Check if competitor exists globally
-		err := db.DB.QueryRowContext(context.Background(), `SELECT id FROM competitors WHERE url = $1`, data.URL).Scan(&competitorID)
+		err = db.DB.QueryRowContext(context.Background(), `SELECT id FROM competitors WHERE url = $1`, data.URL).Scan(&competitorID)
 		if err == sql.ErrNoRows {
 			// ✅ Insert competitor globally
 			err = db.DB.QueryRowContext(context.Background(), `INSERT INTO competitors (url) VALUES ($1) RETURNING id`, data.URL).Scan(&competitorID)

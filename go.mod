@@ -7,11 +7,11 @@ toolchain go1.23.7
 require (
 	github.com/gocolly/colly v1.2.0
 	github.com/gofiber/fiber/v2 v2.52.6
-	github.com/gofiber/jwt/v3 v3.3.10
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	github.com/sashabaranov/go-openai v1.38.0
+	github.com/stripe/stripe-go/v81 v81.4.0
 	golang.org/x/crypto v0.36.0
 )
 
@@ -23,7 +23,6 @@ require (
 	github.com/antchfx/xmlquery v1.4.4 // indirect
 	github.com/antchfx/xpath v1.3.3 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect

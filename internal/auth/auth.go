@@ -19,7 +19,7 @@ var JWTSecretKey = os.Getenv("JWT_SECRET_KEY")
 // User represents a user in the system
 type User struct {
 	ID                 int       `json:"id"`
-	Email              string    `json:"email"` 	
+	Email              string    `json:"email"`
 	PasswordHash       string    `json:"-"`
 	SubscriptionStatus string    `json:"subscription_status"`
 	CreatedAt          time.Time `json:"created_at"`
@@ -60,7 +60,7 @@ func AuthenticateUser(ctx context.Context, db *storage.MypostgresStorage, email,
 	// Compare hashed passwords
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
 	if err != nil {
-		return "", fmt.Errorf("❌ Incorrect password")
+		return "", fmt.Errorf("❌ Invalid Credentials")
 	}
 
 	// Generate JWT token
@@ -75,8 +75,6 @@ func AuthenticateUser(ctx context.Context, db *storage.MypostgresStorage, email,
 
 // generateJWT creates a signed JWT token for the user
 func generateJWT(user User) (string, error) {
-	fmt.Println("🔍 Debugging: Using JWT Secret →", os.Getenv("JWT_SECRET_KEY")) // Debug line
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id":             user.ID,
 		"email":               user.Email,

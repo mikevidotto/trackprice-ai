@@ -4,6 +4,7 @@ import (
 	"github.com/mikevidotto/trackprice-ai/internal/auth"
 	"github.com/mikevidotto/trackprice-ai/internal/handlers"
 	"github.com/mikevidotto/trackprice-ai/internal/middleware"
+	"github.com/mikevidotto/trackprice-ai/internal/payments"
 	"github.com/mikevidotto/trackprice-ai/internal/storage"
 
 	"github.com/gofiber/fiber/v2"
@@ -20,4 +21,16 @@ func SetupRoutes(app *fiber.App, db *storage.MypostgresStorage) {
 	authRoutes.Get("/tracked", handlers.ListTrackedCompetitorsHandler(db))
 	authRoutes.Get("/changes", handlers.GetChangesHandler)
 	authRoutes.Post("/subscribe", handlers.SubscribeHandler)
+
+	// ✅ Fix: Register Stripe Webhook Route
+	app.Post("/stripe/webhook", payments.HandleStripeWebhook(db))
+
+	// ✅ Fix: Add Success & Cancel Routes
+	app.Get("/success", func(c *fiber.Ctx) error {
+		return c.SendString("✅ Payment Successful! You can now track more competitors.")
+	})
+
+	app.Get("/cancel", func(c *fiber.Ctx) error {
+		return c.SendString("❌ Payment Canceled. You have not been charged.")
+	})
 }
