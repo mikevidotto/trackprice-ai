@@ -21,9 +21,8 @@ func SetupRoutes(app *fiber.App, db *storage.MypostgresStorage) {
 	authRoutes.Get("/tracked", handlers.ListTrackedCompetitorsHandler(db))
 	authRoutes.Get("/changes", handlers.GetChangesHandler)
 	authRoutes.Post("/subscribe", handlers.SubscribeHandler)
-
-	// ✅ Fix: Register Stripe Webhook Route
 	app.Post("/stripe/webhook", payments.HandleStripeWebhook(db))
+	authRoutes.Post("/cancel", handlers.CancelSubscription(db))
 
 	// ✅ Fix: Add Success & Cancel Routes
 	app.Get("/success", func(c *fiber.Ctx) error {

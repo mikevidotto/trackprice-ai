@@ -92,6 +92,47 @@ func HandleStripeWebhook(db *storage.MypostgresStorage) fiber.Handler {
 
 			fmt.Printf("✅ Subscription updated for user: %s (Plan: %s)\n", email, plan)
 
+		case "invoice.payment_failed":
+			var invoice stripe.Invoice
+			if err := json.Unmarshal(event.Data.Raw, &invoice); err != nil {
+				fmt.Printf("❌ Failed to parse invoice event: %v\n", err)
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Failed to parse invoice event"})
+			}
+
+			// ✅ Get subscription ID
+			subscriptionID := ""
+			if invoice.Subscription != nil {
+				subscriptionID = invoice.Subscription.ID
+			} else {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "No subscription ID found in invoice"})
+			}
+
+			// ✅ Downgrade user in database
+			_, err = db.DB.Exec(`UPDATE users SET subscription_status = 'free' WHERE stripe_subscription_id = $1`, subscriptionID)
+			if err != nil {
+				fmt.Printf("❌ Failed to downgrade user: %v\n", err)
+			} else {
+				fmt.Printf("✅ Subscription downgraded due to failed payment: %s\n", subscriptionID)
+			}
+		case "customer.subscription.deleted":
+			var subscription stripe.Subscription
+			if err := json.Unmarshal(event.Data.Raw, &subscription); err != nil {
+				fmt.Printf("❌ Failed to parse subscription delete event: %v\n", err)
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Failed to parse subscription delete event"})
+			}
+
+			subscriptionID := subscription.ID
+			if subscriptionID == "" {
+				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "No subscription ID found"})
+			}
+
+			// ✅ Remove subscription ID from database and downgrade user to free plan
+			_, err = db.DB.Exec(`UPDATE users SET subscription_status = 'free', stripe_subscription_id = NULL WHERE stripe_subscription_id = $1`, subscriptionID)
+			if err != nil {
+				fmt.Printf("❌ Failed to remove subscription ID for: %s\n", subscriptionID)
+			} else {
+				fmt.Printf("✅ Subscription canceled, user downgraded: %s\n", subscriptionID)
+			}
 		default:
 			fmt.Printf("ℹ️ Unhandled Stripe event: %s\n", event.Type)
 		}

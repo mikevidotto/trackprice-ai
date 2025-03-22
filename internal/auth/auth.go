@@ -75,6 +75,13 @@ func AuthenticateUser(ctx context.Context, db *storage.MypostgresStorage, email,
 
 // generateJWT creates a signed JWT token for the user
 func generateJWT(user User) (string, error) {
+
+	// err := godotenv.Load(".env")
+	// if err != nil {
+	// 	log.Fatal("error loading dot .env file when generating JWT token:", err)
+	// }
+	fmt.Println("🔍 Debugging generateJWT →", os.Getenv("JWT_SECRET")) // Debug line
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id":             user.ID,
 		"email":               user.Email,

@@ -23,7 +23,8 @@ func TrackCompetitorHandler(db *storage.MypostgresStorage) fiber.Handler {
 
 		// Get current number of tracked competitors
 		var count int
-		err := db.DB.QueryRowContext(context.Background(), `SELECT COUNT(*) FROM tracked_competitors WHERE user_id = $1`, userID).Scan(&count)
+		query := `SELECT COUNT(*) FROM tracked_competitors WHERE user_id = $1`
+		err := db.DB.QueryRowContext(context.Background(), query, userID).Scan(&count)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to check competitor count"})
 		}
