@@ -43,7 +43,6 @@ func AuthMiddleware() fiber.Handler {
 
 		// ✅ Handle token parsing errors
 		if err != nil || !token.Valid {
-			fmt.Println("❌ Debugging: Token Validation Error →", err) // Debug line
 			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or expired token"})
 		}
 
