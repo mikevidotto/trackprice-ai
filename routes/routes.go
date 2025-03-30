@@ -14,6 +14,7 @@ import (
 func SetupRoutes(app *fiber.App, db *storage.MypostgresStorage) {
 	app.Post("/signup", auth.SignUpHandler(db))
 	app.Post("/login", auth.LoginHandler(db))
+	app.Post("/stripe/webhook", payments.HandleStripeWebhook(db))
 
 	// Protected routes (Require JWT authentication)
 	authRoutes := app.Group("/api", middleware.AuthMiddleware())
@@ -21,7 +22,6 @@ func SetupRoutes(app *fiber.App, db *storage.MypostgresStorage) {
 	authRoutes.Get("/tracked", handlers.ListTrackedCompetitorsHandler(db))
 	authRoutes.Get("/changes", handlers.GetChangesHandler)
 	authRoutes.Post("/subscribe", handlers.SubscribeHandler)
-	app.Post("/stripe/webhook", payments.HandleStripeWebhook(db))
 	authRoutes.Post("/cancel", handlers.CancelSubscription(db))
 
 	// ✅ Fix: Add Success & Cancel Routes

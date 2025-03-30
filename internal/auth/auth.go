@@ -84,3 +84,4 @@ func generateJWT(user User) (string, error) {
 
 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }
+

@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/mikevidotto/trackprice-ai/internal/ai"
 	"github.com/mikevidotto/trackprice-ai/internal/scraper"
@@ -61,7 +63,16 @@ func main() {
 	// }()
 
 	// Start Fiber server from `server.go`
-	app := config.InitializeServer()
+	app := fiber.New()
+
+	// Enable CORS for frontend requests
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:5173",
+		AllowMethods: "POST, GET, OPTIONS, PUT, DELETE",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+	}))
+
+	app = config.InitializeServer(app)
 
 	// ✅ This will catch panics and prevent the app from crashing
 	app.Use(recover.New())
@@ -74,7 +85,6 @@ func main() {
 	// ✅ Start the API Server (Main Thread)
 	fmt.Println("🚀 Server running on port", port)
 	log.Fatal(app.Listen(":" + port))
-
 }
 
 // runScraper executes the scraper, extracts data, and stores pricing info

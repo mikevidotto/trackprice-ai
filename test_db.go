@@ -39,10 +39,10 @@ func test_db() {
 
 	// 🔄 Step 1: Insert initial pricing data
 	initialPricing := []ai.PricingInfo{
-		{"Free", "$0", "Monthly"},
-		{"Pro", "$12", "Annually"},
-		{"Pro", "$30", "Monthly"},
-		{"Enterprise", "Contact Sales", "N/A"},
+		{PlanName: "Free", Price: "$0", Billing: "Monthly"},
+		{PlanName: "Pro", Price: "$12", Billing: "Annually"},
+		{PlanName: "Pro", Price: "$30", Billing: "Monthly"},
+		{PlanName: "Enterprise", Price: "Contact Sales", Billing: "N/A"},
 	}
 
 	fmt.Println("🔄 Storing initial pricing data...")
@@ -54,10 +54,10 @@ func test_db() {
 
 	// 🔄 Step 2: Simulate a price change (Pro plan changed from $12 → $15 annually)
 	updatedPricing := []ai.PricingInfo{
-		{"Free", "$0", "Monthly"},              // No change
-		{"Pro", "$15", "Annually"},             // Changed from $12 → $15
-		{"Pro", "$30", "Monthly"},              // No change
-		{"Enterprise", "Contact Sales", "N/A"}, // No change
+		{PlanName: "Free", Price: "$0", Billing: "Monthly"},
+		{PlanName: "Pro", Price: "$15", Billing: "Annually"}, //changed price to 15
+		{PlanName: "Pro", Price: "$30", Billing: "Monthly"},
+		{PlanName: "Enterprise", Price: "Contact Sales", Billing: "N/A"}, // No change
 	}
 
 	fmt.Println("🔄 Simulating a price change (Pro: $12 → $15 annually)...")

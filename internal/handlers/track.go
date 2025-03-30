@@ -71,7 +71,7 @@ func ListTrackedCompetitorsHandler(db *storage.MypostgresStorage) fiber.Handler 
 		user := c.Locals("user").(map[string]interface{})
 		userID := int(user["user_id"].(float64))
 
-		query := `SELECT c.id, c.url, tc.created_at FROM tracked_competitors tc
+		query := `SELECT tc.id, c.url, tc.created_at FROM tracked_competitors tc
                   JOIN competitors c ON tc.competitor_id = c.id WHERE tc.user_id = $1`
 		rows, err := db.DB.QueryContext(context.Background(), query, userID)
 		if err != nil {
