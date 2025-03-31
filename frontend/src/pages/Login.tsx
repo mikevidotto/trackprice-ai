@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import API from "../utils/api";
 import { AuthResponse } from "../utils/types";
@@ -21,6 +22,8 @@ export default function Login() {
   };
 
   return (
+    <>
+    <Header />
     <form onSubmit={handleSubmit}>
       <input
         type="email"
@@ -36,5 +39,6 @@ export default function Login() {
       <br></br>
       <button type="submit">Login</button>
     </form>
+    </>
   );
 }

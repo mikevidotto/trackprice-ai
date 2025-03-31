@@ -1,0 +1,14 @@
+* {
+ margin: 0;
+}
+
+header {
+    width: 100%;
+    background-color: #ddd;
+    display: flex;
+    color: green;
+}
+
+a {
+    margin: 10px;
+}

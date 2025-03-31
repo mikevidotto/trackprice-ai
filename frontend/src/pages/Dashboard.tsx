@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../utils/api";
+import Header from "../components/Header";
 import { AuthResponse } from "../utils/types";
 
 export default function Dashboard() {
@@ -21,6 +22,8 @@ export default function Dashboard() {
   };
 
   return (
+        <>
+        <Header />
     <form onSubmit={handleSubmit}>
       <input
         type="email"
@@ -36,5 +39,6 @@ export default function Dashboard() {
       <br></br>
       <button type="submit">Login</button>
     </form>
+    </>
   );
 }
