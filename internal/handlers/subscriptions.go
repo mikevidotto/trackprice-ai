@@ -40,11 +40,12 @@ func CancelSubscription(db *storage.MypostgresStorage) fiber.Handler {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to cancel subscription"})
 		}
 
-		// // ✅ Downgrade user to free plan in database
-		// _, err = db.DB.Exec(`UPDATE users SET subscription_status = 'free', stripe_subscription_id = NULL WHERE email = $1`, userEmail)
-		// if err != nil {
-		// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update subscription status"})
-		// }
+		 // ✅ Downgrade user to free plan in database
+         // this was commented before... be wary of why?
+		 _, err = db.DB.Exec(`UPDATE users SET subscription_status = 'free', stripe_subscription_id = NULL WHERE email = $1`, userEmail)
+		 if err != nil {
+		 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update subscription status"})
+		 }
 
 		fmt.Printf("✅ Subscription canceled for user: %s\n", userEmail)
 		return c.JSON(fiber.Map{"message": "Subscription successfully canceled on Stripe"})

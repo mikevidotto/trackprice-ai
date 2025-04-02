@@ -27,6 +27,7 @@ export default function Track() {
                     console.log(status)
                     })
 
+    getCompetitors();
     } catch (err) {
       console.error("Failed to track competitors:", err);
     }
@@ -46,6 +47,7 @@ export default function Track() {
       });
   };
 
+
   return (
     <>
     <Header />
@@ -60,7 +62,8 @@ export default function Track() {
     </form>
     <div>
       {competitors.map((competitors) => {
-        return <p>{competitors.id} : {competitors.competitor_url} created at: {competitors.created_at} </p>
+        return <p key={competitors.id}>{competitors.id} : {competitors.competitor_url} created at: {competitors.created_at} </p>
+                    
       })}
     </div> 
     </>

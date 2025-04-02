@@ -20,13 +20,11 @@ import (
 )
 
 func main() {
-	// Load environment variables
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	// Connect to database
 	dbURL := os.Getenv("DATABASE_URL")
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
@@ -62,10 +60,8 @@ func main() {
 	// 	}
 	// }()
 
-	// Start Fiber server from `server.go`
 	app := fiber.New()
 
-	// Enable CORS for frontend requests
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "http://localhost:5173",
 		AllowMethods: "POST, GET, OPTIONS, PUT, DELETE",
@@ -74,7 +70,6 @@ func main() {
 
 	app = config.InitializeServer(app)
 
-	// ✅ This will catch panics and prevent the app from crashing
 	app.Use(recover.New())
 
 	port := os.Getenv("PORT")
@@ -82,12 +77,10 @@ func main() {
 		port = "8085"
 	}
 
-	// ✅ Start the API Server (Main Thread)
 	fmt.Println("🚀 Server running on port", port)
 	log.Fatal(app.Listen(":" + port))
 }
 
-// runScraper executes the scraper, extracts data, and stores pricing info
 func runScraper(db *storage.MypostgresStorage, urls []string) {
 	for _, url := range urls {
 		fmt.Println("🔄 Scraping:", url)
