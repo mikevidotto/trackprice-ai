@@ -14,16 +14,12 @@ import (
 	"github.com/mikevidotto/trackprice-ai/internal/scraper"
 	"github.com/mikevidotto/trackprice-ai/internal/storage"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/mikevidotto/trackprice-ai/config"
 )
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+    config.LoadConfig()
 
 	dbURL := os.Getenv("DATABASE_URL")
 	db, err := sql.Open("postgres", dbURL)
@@ -31,6 +27,26 @@ func main() {
 		log.Fatal("❌ Failed to connect to database:", err)
 	}
 	defer db.Close()
+
+	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:5173",
+		AllowMethods: "POST, GET, OPTIONS, PUT, DELETE",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+	}))
+
+	app = config.InitializeServer(app)
+
+	app.Use(recover.New())
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8085"
+	}
+
+	fmt.Println("🚀 Server running on port", port)
+	log.Fatal(app.Listen(":" + port))
 
 	// store, err := storage.NewMypostgresStorage()
 	// if err != nil {
@@ -59,26 +75,6 @@ func main() {
 	// 		}
 	// 	}
 	// }()
-
-	app := fiber.New()
-
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:5173",
-		AllowMethods: "POST, GET, OPTIONS, PUT, DELETE",
-		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
-	}))
-
-	app = config.InitializeServer(app)
-
-	app.Use(recover.New())
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8085"
-	}
-
-	fmt.Println("🚀 Server running on port", port)
-	log.Fatal(app.Listen(":" + port))
 }
 
 func runScraper(db *storage.MypostgresStorage, urls []string) {

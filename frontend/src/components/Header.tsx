@@ -10,7 +10,7 @@ return (
         <a href="http://localhost:5173/">Home</a>
         <a href="http://localhost:5173/signup">Join</a>
         <a href="http://localhost:5173/login">Login</a>
-        <a href="http://localhost:5173/">About</a>
+        <a href="http://localhost:5173/track">Dashboard</a>
         <a href="http://localhost:5173/">Contact</a>
 
     </header>

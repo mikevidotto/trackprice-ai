@@ -18,7 +18,6 @@ func InitializeServer(app *fiber.App) *fiber.App {
 	}
 	// Register routes
 	routes.SetupRoutes(app, &store)
-
 	// Set server port
 	port := os.Getenv("PORT")
 	if port == "" {

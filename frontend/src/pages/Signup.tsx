@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header.tsx";
+import Header from "../components/Header.tsx"
 import API from "../utils/api";
 import { AuthResponse } from "../utils/types";
 

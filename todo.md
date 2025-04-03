@@ -1,8 +1,9 @@
 # TODO
 
 [] CREATE COMPONENTS!!!!!!
-    [] Create a Login Portal component
-    [] Create a Sign Up Portal component
+    [x] Create a Login Portal component
+    [x] Create a Sign Up Portal component
+    [] Modify Track component to look better.
 [] modify/split frontend/pages/Track.tsx
     [] create Submit.tsx
         [] Submits a competitor via react component form that makes post call using axios.post("/track")
@@ -19,8 +20,9 @@
         [] footer
     [] make it responsive
 
-[] modify frontend/src/components/Header
+[x] modify frontend/src/components/Header
     ***NAV-BAR ITEMS SHOULD NOT CALL THE API DIRECTLY!!***
-    [] change the login route to redirect to Login.tsx page
-        [] Create Login Page with option to signup
+    ***NEVERMIND! THEY DON'T AS LONG AS THEY'RE NOT ROUTED ON THE BACKEND!!!! (so it's all good bro)***
+    [x] change the login route to redirect to Login.tsx page
+        [x] Create Login Page with option to signup
         
