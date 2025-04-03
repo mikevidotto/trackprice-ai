@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../utils/api";
 import Header from "../components/Header";
 import { AuthResponse } from "../utils/types";
+import Track from "../pages/Track"
 
 export default function Dashboard() {
   const [email, setEmail] = useState("");

@@ -3,7 +3,6 @@ import Track from "../pages/Track"
 
 export default function Home() {
     return (
-        
         <section>
         <Header />
         <div className="home">

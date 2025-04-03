@@ -1,8 +1,10 @@
 import Header from "../components/Header";
 import { useState } from "react";
 import axios from 'axios'
-
+import "../css/Track.css"
+import API from "../utils/api"
 export const client = axios.create({})
+
 
 export default function Track() {
   const [url, setUrl] = useState("");
@@ -13,12 +15,7 @@ export default function Track() {
   const submitCompetitor= async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      axios.post(
-                'http://localhost:8085/api/track',
-                {"url": url},
-                {headers: {
-                    'Authorization' : 'Bearer ' + token
-      }})
+      API.post('/api/track', {"url": url})
         .then(() => {
                 getCompetitors();
               },
@@ -27,7 +24,6 @@ export default function Track() {
                     console.log(status)
                     })
 
-    getCompetitors();
     } catch (err) {
       console.error("Failed to track competitors:", err);
     }
