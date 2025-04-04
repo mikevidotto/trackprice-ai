@@ -79,7 +79,7 @@ func generateJWT(user User) (string, error) {
 		"user_id":             user.ID,
 		"email":               user.Email,
 		"subscription_status": user.SubscriptionStatus,
-		"exp":                 time.Now().Add(24 * time.Hour).Unix(), // Token expires in 24 hours
+		"exp":                 time.Now().Add(1 * time.Hour).Unix(), // Token expires in 1 hour.
 	})
 
 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))

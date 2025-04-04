@@ -57,7 +57,6 @@ func AuthMiddleware() fiber.Handler {
 		for key, value := range claims {
 			userData[key] = value
 		}
-
 		// ✅ Store user data in request context
 		c.Locals("user", userData)
 

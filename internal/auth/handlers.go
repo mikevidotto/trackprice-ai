@@ -43,3 +43,10 @@ func LoginHandler(db *storage.MypostgresStorage) fiber.Handler {
 		return c.JSON(fiber.Map{"token": token})
 	}
 }
+
+func LogoutHandler(db *storage.MypostgresStorage) fiber.Handler {
+    return func(c *fiber.Ctx) error {
+        c.Locals("user", nil) 
+        return c.JSON(fiber.Map{"token": ""}) 
+    }
+}

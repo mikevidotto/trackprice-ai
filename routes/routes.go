@@ -14,6 +14,8 @@ import (
 func SetupRoutes(app *fiber.App, db *storage.MypostgresStorage) {
 	app.Post("/signup", auth.SignUpHandler(db))
 	app.Post("/login", auth.LoginHandler(db))
+    app.Post("/logout", auth.LogoutHandler(db))
+
 	app.Post("/stripe/webhook", payments.HandleStripeWebhook(db))
 
 	// Protected routes (Require JWT authentication)

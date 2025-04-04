@@ -1,9 +1,9 @@
 # TODO
-
-[] CREATE COMPONENTS!!!!!!
+[] ADD LOGOUT FUNCTIONALITY
+    [] Add responsive login/logout buttons.
+[x] CREATE COMPONENTS!!!!!!
     [x] Create a Login Portal component
     [x] Create a Sign Up Portal component
-    [] Modify Track component to look better.
 [] modify/split frontend/pages/Track.tsx
     [] create Submit.tsx
         [] Submits a competitor via react component form that makes post call using axios.post("/track")
