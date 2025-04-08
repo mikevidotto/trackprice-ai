@@ -96,8 +96,6 @@ func ListTrackedCompetitorsHandler(db *storage.MypostgresStorage) fiber.Handler 
 }
 
 // RemoveTrackedCompetitorHandler allows users to remove a tracked competitor
-// RemoveTrackedCompetitorHandler allows users to stop tracking a competitor
-// RemoveTrackedCompetitorHandler allows users to stop tracking a competitor
 func RemoveTrackedCompetitorHandler(db *storage.MypostgresStorage) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		user := c.Locals("user").(map[string]interface{})

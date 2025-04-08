@@ -1,12 +1,11 @@
 # TODO
 --------------------------------------------------
-[] modify/split frontend/pages/Track.tsx
-    [] create Submit.tsx
-        [] Submits a competitor via react component form that makes post call using axios.post("/track")
-        [] the Track() function
-    [] create Display.tsx
-        [] Displays user's competitors in a list react component using axios.get("/track")
-        [] the getCompetitors() function within the Track() function.
+
+## ------FOCUSED ITEMS------
+
+
+
+## ------FRONTEND------
 
 [] create a page layout that you can put your react components into (use App.tsx??)
     [] add layout components
@@ -15,13 +14,20 @@
         [] body
         [] footer
     [] make it responsive
+[] add a logo to the header that brings you back to the homepage
+[] style dashboard to match canva mockup
+[] style homepage to match canva mockup
 
 
+## ------BACKEND------
+[] organize all models into one models.go file
+    [] Double check every file for models
+    [] internal/auth/models.go: move models to internal/models/models.go
+    [] internal/auth/auth.go: move Users model into internal/models/models.go
+    [] internal/storage/postgres.go: move Price model into internal/models/models.go
+    [] internal/ai/openai.go: move model
 
-
-
-
-COMPLETED:
+## ------COMPLETED------
 --------------------------------------------------
 [x] modify frontend/src/components/Header
     ***NAV-BAR ITEMS SHOULD NOT CALL THE API DIRECTLY!!***
@@ -33,3 +39,4 @@ COMPLETED:
 [x] CREATE COMPONENTS!!!!!!
     [x] Create a Login Portal component
     [x] Create a Sign Up Portal component
+[x] design a layout for the dashboard on canva

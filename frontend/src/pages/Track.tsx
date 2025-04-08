@@ -7,10 +7,10 @@ export default function Track() {
     const [url, setUrl] = useState("");
     const [competitors, setCompetitors] = useState<any[]>([]);
 
-    const submitCompetitor= async (e: React.FormEvent) => {
+    const submitCompetitor = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await API.post('/api/track', {"url": url})
+            await API.post('/api/track', { "url": url })
                 .then(() => {
                     console.log("WE ADDED A TRACKER.")
                     getCompetitors()
@@ -26,8 +26,7 @@ export default function Track() {
     };
 
     function getCompetitors() {
-        console.log("getting competitors....")
-         API.get("http://localhost:8085/api/tracked")
+        API.get("http://localhost:8085/api/tracked")
             .then((response) => {
                 if (response.data == null) {
                     console.error("Error: user has no competitors.")
@@ -42,25 +41,40 @@ export default function Track() {
     }
     useEffect(
         getCompetitors, // <- function that will run on every dependency update
-    [] // <-- empty dependency array
-)
+        [] // <-- empty dependency array
+    )
 
     return (
         <>
-            <form onSubmit={submitCompetitor}>
-                <input
-                    type="url"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                />
-                <br></br>
-                <button type="submit">Track</button>
-            </form>
-            <div>
-                {competitors.map((competitors) => {
-                    return <p key={competitors.id}>{competitors.id} : {competitors.competitor_url} created at: {competitors.created_at} </p>
-                })}
-            </div> 
+            <section id="dashboard">
+                <aside className="dashboard-side"></aside>
+                <div id="dashboard-card">
+                    <h4>All Competitors</h4>
+                    <hr></hr>
+                    <div id="filter-bar">
+                        <button>Name</button>
+                        <button>Created</button>
+                    </div>
+                    {competitors.map((competitors) => {
+                        return <div className="competitor-box" key={competitors.id}>
+                            <div id="competitor-box-nameurl">{competitors.competitor_url}</div>
+                            <div id="competitor-box-created">{competitors.created_at}</div>
+                        </div>
+                    })}
+                    <div className="competitor-box">
+                        <form id="competitor-form" onSubmit={submitCompetitor}>
+                            <input
+                                type="url"
+                                value={url}
+                                onChange={(e) => setUrl(e.target.value)}
+                            />
+                            <br></br>
+                            <button type="submit">Track</button>
+                        </form>
+                    </div>
+                </div>
+                <aside className="dashboard-side"></aside>
+            </section>
         </>
     );
 }
