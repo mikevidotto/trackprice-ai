@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import "../css/Track.css";
 import API from "../utils/api";
+import moment from 'moment';
 
 export default function Track() {
     const [url, setUrl] = useState("");
@@ -57,13 +58,61 @@ export default function Track() {
                     </div>
                     {competitors.map((competitors) => {
                         return <div className="competitor-box" key={competitors.id}>
-                            <div id="competitor-box-nameurl">{competitors.competitor_url}</div>
-                            <div id="competitor-box-created">{competitors.created_at}</div>
+                            <div id="box-data">
+                                <div id="comp-label">
+                                    Competitor
+                                </div>
+                                <div id="comp-url">
+                                    {(competitors.competitor_url)}
+                                </div>
+                            </div>
+                            <div id="box-data">
+                                <div id="comp-label">
+                                    Prices
+                                </div>
+                                <div id="comp-prices">
+                                    <div className="comp-prices-label">
+                                        Pro:
+                                    </div>
+                                    <div className="comp-prices">
+                                        $12 
+                                    </div>
+                                    <div className="comp-prices-change">
+                                        +8.3%
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="box-data">
+                                <div id="comp-label">
+                                    Last Change
+                                </div>
+                                <div id="comp-last-change">
+                                    Mar 8
+                                </div>
+                            </div>
+                            <div id="box-data">
+                                <div id="comp-label">
+                                    Last Scraped
+                                </div>
+                                <div id="comp-last-scraped">
+                                    Mar 8
+                                </div>
+                            </div>
+                            <div id="box-data">
+                                <div id="comp-label">
+                                    Created
+                                </div>
+                                <div id="comp-created">
+                                    {moment(competitors.created_at).format("MMM D")}
+                                </div>
+                            </div>
                         </div>
                     })}
-                    <div className="competitor-box">
+                    <div className="submit-competitor-box">
                         <form id="competitor-form" onSubmit={submitCompetitor}>
+                            <label htmlFor="url">Competitor Url: </label>
                             <input
+                                id="url"
                                 type="url"
                                 value={url}
                                 onChange={(e) => setUrl(e.target.value)}

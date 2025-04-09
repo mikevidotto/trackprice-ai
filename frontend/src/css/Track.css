@@ -3,14 +3,14 @@
 }
 
 #dashboard {
-    display:flex;
+    display: flex;
     flex-direction: row;
     min-height: 700px;
     width: 100%;
 }
 
 .dashboard-side {
-    display:flex;
+    display: flex;
     min-height: 600px;
     width: 20%;
 }
@@ -26,13 +26,13 @@
 }
 
 #dashboard-card h4 {
-    display:flex;
+    display: flex;
     justify-content: start;
     width: 100%;
     height: 10px;
     padding-left: 20px;
     color: #444;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 hr {
@@ -46,16 +46,33 @@ hr {
     align-items: center;
     height: 30px;
 }
-
-.competitor-box{
+.submit-competitor-box {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     height: 60px;
     font-size: 12px;
     margin: 10px;
-    border: 0.5px solid white;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 7px;
+    color: #444;
+}
+
+.submit-competitor-box:hover {
+    border: 0.5px solid #aaa;
+}
+
+.competitor-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 60px;
+    font-size: 12px;
+    margin: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     border-radius: 7px;
     color: #444;
 }
@@ -71,8 +88,82 @@ hr {
     align-items: center;
 }
 
+#competitor-form label {
+    padding-right: 5px;
+}
+
 #competitor-form input {
     height: 17px;
+}
+
+#box-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2px;
+    width: 200px;
+}
+
+#comp-label {
+    display: flex;
+    justify-content: start;
+    color: #444;
+}
+
+#comp-url {
+    display: flex;
+    justify-content: start;
+    color: #aaa;
+    font-size: 10px;
+}
+
+#comp-created {
+    display: flex;
+    justify-content: start;
+    color: #aaa;
+    font-size: 10px;
+}
+
+#comp-prices {
+    display: flex;
+    flex-direction: row;
+}
+
+.comp-prices-label {
+    display: flex;
+    padding-right: 2px;
+    justify-content: start;
+    color: #aaa;
+    font-size: 10px;
+}
+
+.comp-prices {
+    display: flex;
+    padding-right: 2px;
+    justify-content: start;
+    color: #aaa;
+    font-size: 10px;
+}
+
+.comp-prices-change {
+    display: flex;
+    justify-content: start;
+    color: limegreen;
+    font-size: 10px;
+}
+
+#comp-last-change {
+    display: flex;
+    justify-content: start;
+    color: #aaa;
+    font-size: 10px;
+}
+
+#comp-last-scraped {
+    display: flex;
+    justify-content: start;
+    color: #aaa;
+    font-size: 10px;
 }
 
 button {
