@@ -17,5 +17,5 @@ type Storage interface {
 	DetectPriceChanges(ctx context.Context, competitorID int) (models.PriceChange, error)
 	StoreAIInsights(ctx context.Context, changeID int, summary string) error
 	SavePricingData(ctx context.Context, url, newPricing string) error
-	GetLatestPrices(ctx context.Context, url string) ([]Price, error)
+	GetLatestPrices(ctx context.Context, url string) ([]models.Price, error)
 }

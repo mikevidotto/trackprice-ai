@@ -1,32 +1,36 @@
+--------------------------------------------------
 # TODO
 --------------------------------------------------
 
 ## ------FOCUSED ITEMS------
-
+[] style dashboard to match canva mockup
+    [x] competitors table with data
+    [] side panel with name, email and email alerts button 
 
 
 ## ------FRONTEND------
-
-[] create a page layout that you can put your react components into (use App.tsx??)
-    [] add layout components
-        [] header
-        [] nav-bar
-        [] body
-        [] footer
-    [] make it responsive
+[] dashboard functionality
+    [] if no price changes have occured, show that
+    [] if price changes have occured, show the difference by a percentage
+    [] display last-scraped data value for each competitor
+    [] display competitor name for each competitor
+[] make the website responsive
 [] add a logo to the header that brings you back to the homepage
-[] style dashboard to match canva mockup
 [] style homepage to match canva mockup
 
 
 ## ------BACKEND------
-[] organize all models into one models.go file
-    [] Double check every file for models
-    [] internal/auth/models.go: move models to internal/models/models.go
-    [] internal/auth/auth.go: move Users model into internal/models/models.go
-    [] internal/storage/postgres.go: move Price model into internal/models/models.go
-    [] internal/ai/openai.go: move model
+[] add name to competitor data model so that you can send it to the frontend
+[] internal/auth/models.go: move models to internal/models/models.go (SHOULD IT STAY?)
 
+
+
+
+
+
+
+
+--------------------------------------------------
 ## ------COMPLETED------
 --------------------------------------------------
 [x] modify frontend/src/components/Header
@@ -40,3 +44,8 @@
     [x] Create a Login Portal component
     [x] Create a Sign Up Portal component
 [x] design a layout for the dashboard on canva
+[x] organize all models into one models.go file
+    [x] Double check every file for models
+    [x] internal/auth/auth.go: move Users model into internal/models/models.go
+    [x] internal/storage/postgres.go: move Price model into internal/models/models.go
+    [x] internal/ai/openai.go: move model

@@ -6,17 +6,12 @@ import (
 	"fmt"
 	"os"
 
+    "github.com/mikevidotto/trackprice-ai/models"
 	openai "github.com/sashabaranov/go-openai"
 )
 
-type PricingInfo struct {
-	PlanName string `json:"plan_name"`
-	Price    string `json:"price"`
-	Billing  string `json:"billing"`
-}
-
 // ExtractPricingInfo calls OpenAI API to extract pricing details
-func ExtractPricingInfo(rawText string) ([]PricingInfo, error) {
+func ExtractPricingInfo(rawText string) ([]models.PricingInfo, error) {
 	apiKey := os.Getenv("OPENAI_KEY")
 	if apiKey == "" {
 		return nil, fmt.Errorf("❌ OPENAI_KEY is not set in .env")
@@ -67,7 +62,7 @@ Text:
 
 	// Define a struct to match OpenAI's JSON format
 	type OpenAIResponse struct {
-		Pricing []PricingInfo `json:"pricing"`
+		Pricing []models.PricingInfo `json:"pricing"`
 	}
 
 	// Parse JSON response

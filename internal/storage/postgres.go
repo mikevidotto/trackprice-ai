@@ -21,15 +21,6 @@ type MypostgresStorage struct {
 	DB *sql.DB
 }
 
-// Price represents the pricing information stored in the database
-type Price struct {
-	ID            int
-	CompetitorURL string
-	PlanName      string
-	Price         string
-	BillingCycle  string
-	ExtractedAt   time.Time
-}
 
 // type MypostgresConfig struct {
 // 	Username string
@@ -229,7 +220,7 @@ func (s *MypostgresStorage) SavePricingData(ctx context.Context, url string, pri
 }
 
 // GetLatestPrices retrieves the latest stored prices
-func (s *MypostgresStorage) GetLatestPrices(ctx context.Context, url string) ([]Price, error) {
+func (s *MypostgresStorage) GetLatestPrices(ctx context.Context, url string) ([]models.Price, error) {
 	query := `
 		SELECT id, competitor_url, plan_name, price, billing_cycle, extracted_at
 		FROM prices WHERE competitor_url = $1
@@ -241,9 +232,9 @@ func (s *MypostgresStorage) GetLatestPrices(ctx context.Context, url string) ([]
 	}
 	defer rows.Close()
 
-	var prices []Price
+	var prices []models.Price
 	for rows.Next() {
-		var p Price
+		var p models.Price
 		if err := rows.Scan(&p.ID, &p.CompetitorURL, &p.PlanName, &p.Price, &p.BillingCycle, &p.ExtractedAt); err != nil {
 			return nil, err
 		}

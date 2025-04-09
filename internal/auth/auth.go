@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/mikevidotto/trackprice-ai/internal/storage"
+    "github.com/mikevidotto/trackprice-ai/internal/models"
 
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -15,15 +16,6 @@ import (
 
 // JWTSecretKey loads from environment variables
 var JWTSecretKey = os.Getenv("JWT_SECRET")
-
-// User represents a user in the system
-type User struct {
-	ID                 int       `json:"id"`
-	Email              string    `json:"email"`
-	PasswordHash       string    `json:"-"`
-	SubscriptionStatus string    `json:"subscription_status"`
-	CreatedAt          time.Time `json:"created_at"`
-}
 
 // RegisterUser hashes the password and stores user in the database
 func RegisterUser(ctx context.Context, db *storage.MypostgresStorage, email, password string) error {
@@ -46,7 +38,7 @@ func RegisterUser(ctx context.Context, db *storage.MypostgresStorage, email, pas
 
 // AuthenticateUser verifies email & password and returns a JWT token
 func AuthenticateUser(ctx context.Context, db *storage.MypostgresStorage, email, password string) (string, error) {
-	var user User
+	var user models.User
 
 	// Retrieve user by email
 	query := `SELECT id, email, password_hash, subscription_status, created_at FROM users WHERE email = $1`
@@ -74,7 +66,7 @@ func AuthenticateUser(ctx context.Context, db *storage.MypostgresStorage, email,
 }
 
 // generateJWT creates a signed JWT token for the user
-func generateJWT(user User) (string, error) {
+func generateJWT(user models.User) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id":             user.ID,
 		"email":               user.Email,

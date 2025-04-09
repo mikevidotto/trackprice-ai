@@ -6,7 +6,10 @@ import "time"
 type User struct {
 	ID        int       `json:"id"`
 	Email     string    `json:"email"`
-	Password  string    `json:"-"`
+	//Password  string    `json:"-"`
+	PasswordHash       string    `json:"-"`
+    //new
+	SubscriptionStatus string    `json:"subscription_status"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
@@ -26,4 +29,20 @@ type PriceChange struct {
 	DetectedChange string    `json:"detected_change"`
 	AISummary      string    `json:"ai_summary"`
 	CreatedAt      time.Time `json:"created_at"`
+}
+
+// Price represents the pricing information stored in the database
+type Price struct {
+	ID            int
+	CompetitorURL string
+	PlanName      string
+	Price         string
+	BillingCycle  string
+	ExtractedAt   time.Time
+}
+
+type PricingInfo struct {
+	PlanName string `json:"plan_name"`
+	Price    string `json:"price"`
+	Billing  string `json:"billing"`
 }
