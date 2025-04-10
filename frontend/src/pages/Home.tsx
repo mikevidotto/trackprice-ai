@@ -1,6 +1,10 @@
 import Header from "../components/Header"
 
 export default function Home() {
+    try {
+    } catch (error) {
+        console.log(error)
+    }
     return (
         <section>
         <Header />

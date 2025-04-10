@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/Track.css";
 import API from "../utils/api";
 import moment from 'moment';
 
 export default function Track() {
+    const navigate = useNavigate();
     const [url, setUrl] = useState("");
     const [competitors, setCompetitors] = useState<any[]>([]);
 
@@ -37,7 +39,20 @@ export default function Track() {
                 }
             })
             .catch((error) => {
-                console.error("Error fetching competitors in CompList:", error);
+                if (error.status == 401) {
+                    console.error("token is no longer valid. logging out.")
+                    API.post("/logout")
+                        .then(() => {
+                            localStorage.setItem("token", "")
+                            navigate("/")
+                        },
+                            (error) => {
+                                var status = error.response.status
+                                console.log(status)
+                            })
+                } else {
+                    console.error("Error fetching competitors in CompList:", error);
+                }
             });
     }
     useEffect(
@@ -75,7 +90,7 @@ export default function Track() {
                                         Pro:
                                     </div>
                                     <div className="comp-prices">
-                                        $12 
+                                        $12
                                     </div>
                                     <div className="comp-prices-change">
                                         +8.3%

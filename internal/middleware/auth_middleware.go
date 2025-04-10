@@ -43,7 +43,8 @@ func AuthMiddleware() fiber.Handler {
 
 		// ✅ Handle token parsing errors
 		if err != nil || !token.Valid {
-			return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or expired token"})
+            c.Locals("user", nil)
+            return c.Status(http.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid or expired token", "token": ""})
 		}
 
 		// ✅ Extract claims safely
