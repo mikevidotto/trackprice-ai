@@ -7,9 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
-	"github.com/mikevidotto/trackprice-ai/internal/ai"
 	"github.com/mikevidotto/trackprice-ai/internal/models"
 	"github.com/mikevidotto/trackprice-ai/internal/notifications"
 
@@ -54,7 +52,7 @@ func NewMypostgresStorage() (MypostgresStorage, error) {
 // Create a new user
 func (s *MypostgresStorage) CreateUser(ctx context.Context, user models.User) (models.User, error) {
 	query := "INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, created_at"
-	err := s.DB.QueryRowContext(ctx, query, user.Email, user.Password).Scan(&user.ID, &user.CreatedAt)
+	err := s.DB.QueryRowContext(ctx, query, user.Email, user.PasswordHash).Scan(&user.ID, &user.CreatedAt)
 	if err != nil {
 		return models.User{}, err
 	}
@@ -65,7 +63,7 @@ func (s *MypostgresStorage) CreateUser(ctx context.Context, user models.User) (m
 func (s *MypostgresStorage) GetUserByEmail(ctx context.Context, email string) (models.User, error) {
 	var user models.User
 	query := "SELECT id, email, password_hash, created_at FROM users WHERE email = $1"
-	err := s.DB.QueryRowContext(ctx, query, email).Scan(&user.ID, &user.Email, &user.Password, &user.CreatedAt)
+	err := s.DB.QueryRowContext(ctx, query, email).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.CreatedAt)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return models.User{}, errors.New("user not found")
@@ -163,7 +161,7 @@ func (s *MypostgresStorage) StoreAIInsights(ctx context.Context, changeID int, s
 }
 
 // ✅ SavePricingData stores extracted pricing & sends email alerts for price changes
-func (s *MypostgresStorage) SavePricingData(ctx context.Context, url string, pricingData []ai.PricingInfo) error {
+func (s *MypostgresStorage) SavePricingData(ctx context.Context, url string, pricingData []models.PricingInfo) error {
 	for _, price := range pricingData {
 		// ✅ Check if this exact plan with the same billing cycle already exists
 		var lastPrice string

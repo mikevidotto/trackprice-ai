@@ -37,7 +37,7 @@ func test_users() {
 	// Test user creation
 	user := models.User{
 		Email:    "test@example.com",
-		Password: "hashedpassword123",
+		PasswordHash: "hashedpassword123",
 	}
 
 	createdUser, err := store.CreateUser(context.Background(), user)

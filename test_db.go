@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/mikevidotto/trackprice-ai/internal/ai"
+	"github.com/mikevidotto/trackprice-ai/internal/models"
 	"github.com/mikevidotto/trackprice-ai/internal/storage"
 
 	"github.com/joho/godotenv"
@@ -38,7 +38,7 @@ func test_db() {
 	testURL := "https://instantly.ai/plans"
 
 	// 🔄 Step 1: Insert initial pricing data
-	initialPricing := []ai.PricingInfo{
+	initialPricing := []models.PricingInfo{
 		{PlanName: "Free", Price: "$0", Billing: "Monthly"},
 		{PlanName: "Pro", Price: "$12", Billing: "Annually"},
 		{PlanName: "Pro", Price: "$30", Billing: "Monthly"},
@@ -53,7 +53,7 @@ func test_db() {
 	fmt.Println("✅ Initial pricing data stored successfully!")
 
 	// 🔄 Step 2: Simulate a price change (Pro plan changed from $12 → $15 annually)
-	updatedPricing := []ai.PricingInfo{
+	updatedPricing := []models.PricingInfo{
 		{PlanName: "Free", Price: "$0", Billing: "Monthly"},
 		{PlanName: "Pro", Price: "$15", Billing: "Annually"}, //changed price to 15
 		{PlanName: "Pro", Price: "$30", Billing: "Monthly"},

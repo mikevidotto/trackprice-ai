@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-    "github.com/mikevidotto/trackprice-ai/models"
+    "github.com/mikevidotto/trackprice-ai/internal/models"
 	openai "github.com/sashabaranov/go-openai"
 )
 

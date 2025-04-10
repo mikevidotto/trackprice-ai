@@ -5,7 +5,7 @@
 ## ------FOCUSED ITEMS------
 [] style dashboard to match canva mockup
     [x] competitors table with data
-    [] side panel with name, email and email alerts button 
+    [] side panel with name, email and email alerts button
 
 
 ## ------FRONTEND------
@@ -20,6 +20,15 @@
 
 
 ## ------BACKEND------
+[] when a user's token expires and they navigate to the homepage, the token should be wiped to have login state change
+    [] set middleware to check on homepage for token.
+        [] if a token is in localstorage, check if it's valid
+            [] if it's not valid, delete it from localstorage and refresh homepage.
+            [] if it IS valid, the user should be logged in.
+    [] test token expiry
+        [] set token expiry to 5 seconds
+        [] login
+        [] navigate to homepage
 [] add name to competitor data model so that you can send it to the frontend
 [] internal/auth/models.go: move models to internal/models/models.go (SHOULD IT STAY?)
 
