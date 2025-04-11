@@ -1,4 +1,6 @@
 import Header from "../components/Header"
+import logo from "../assets/logo.png"
+import "../css/Home.css"
 
 export default function Home() {
     try {
@@ -7,12 +9,18 @@ export default function Home() {
     }
     return (
         <section>
-        <Header />
-        <div className="home">
-            <h1>Welcome to the Home Page!</h1>
-            <p>This is the home page of our application.</p>
-            <p>Feel free to explore the features and functionalities we offer.</p>
-        </div>
+            <Header />
+            <div id="homepage">
+                <div id="left-side">
+                    <h1 id="home-header">TrackPrice<span style={{ color: "green" }}>AI</span></h1>
+                    <p>
+                        TrackPrice AI tracks your competitors’ pricing so you don’t have to. Add URLs, and we’ll notify you when prices change—automatically. Stay informed, react faster, and build smarter pricing strategies with zero manual monitoring.
+                    </p>
+                </div>
+                <div id="right-side">
+                    <img src={logo}></img>
+                </div>
+            </div>
         </section>
     );
 }
