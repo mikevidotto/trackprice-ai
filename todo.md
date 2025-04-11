@@ -3,23 +3,26 @@
 --------------------------------------------------
 
 ## ------FOCUSED ITEMS------
-[] style dashboard to match canva mockup
-    [x] competitors table with data
-    [] side panel with name, email and email alerts button
 
 
 ## ------FRONTEND------
+
 [] dashboard functionality
-    [] if no price changes have occured, show that
+    [] if no price changes have occured: show default 0%
     [] if price changes have occured, show the difference by a percentage
     [] display last-scraped data value for each competitor
     [] display competitor name for each competitor
 [] make the website responsive
 [] add a logo to the header that brings you back to the homepage
+    [] design a logo
+    [] generate png/svg/jpg whatever
+    [] add to assets
+    [] link to header
 [] style homepage to match canva mockup
 
 
 ## ------BACKEND------
+
 [] when a user's token expires and they navigate to the homepage, the token should be wiped to have login state change
     [] set middleware to check on homepage for token.
         [] if a token is in localstorage, check if it's valid
@@ -30,13 +33,8 @@
         [] login
         [] navigate to homepage
 [] add name to competitor data model so that you can send it to the frontend
+[] add firstname lastname to user data model so that you can send it to frontend /track
 [] internal/auth/models.go: move models to internal/models/models.go (SHOULD IT STAY?)
-
-
-
-
-
-
 
 
 --------------------------------------------------
@@ -58,3 +56,7 @@
     [x] internal/auth/auth.go: move Users model into internal/models/models.go
     [x] internal/storage/postgres.go: move Price model into internal/models/models.go
     [x] internal/ai/openai.go: move model
+[x] style dashboard to match canva mockup
+    [x] competitors table with data
+    [x] side panel with name, email and email alerts toggle 
+        - see: https://getbootstrap.com/docs/5.3/forms/checks-radios/ 

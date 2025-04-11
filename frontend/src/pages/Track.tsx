@@ -63,7 +63,21 @@ export default function Track() {
     return (
         <>
             <section id="dashboard">
-                <aside className="dashboard-side"></aside>
+                <aside className="dashboard-side">
+                    <div id="side-data">
+                        <div id="user-data">
+                            <h4 id="username">Firstname Lastname</h4>
+                            <h6 id="email">mikevidotto@live.com</h6>
+                        </div>
+                        <div id="settings">
+                            <p>Email Alerts:</p>
+                            <label className="switch">
+                                <input type="checkbox"></input>
+                                <span className="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </aside>
                 <div id="dashboard-card">
                     <h4>All Competitors</h4>
                     <hr></hr>
