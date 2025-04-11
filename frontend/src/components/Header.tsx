@@ -7,10 +7,10 @@ export default function Header() {
             <>
                 <header>
                     <div id="logo">
-                            <a id="logobtn" href="http://localhost:5173/">
-                                <img id="logo-image" src={logo}></img>
-                                <p>TrackPriceAi</p>
-                            </a>
+                        <a id="logobtn" href="http://localhost:5173/">
+                            <img id="logo-image" src={logo}></img>
+                            <p>TrackPriceAi</p>
+                        </a>
                     </div>
                     <a href="http://localhost:5173/">Home</a>
                     <a href="http://localhost:5173/signup">Join</a>
@@ -24,7 +24,10 @@ export default function Header() {
         <>
             <header>
                 <div id="logo">
-                    <a href="http://localhost:5173/">TrackPriceAi</a>
+                    <a id="logobtn" href="http://localhost:5173/">
+                        <img id="logo-image" src={logo}></img>
+                        <p>TrackPriceAi</p>
+                    </a>
                 </div>
                 <a href="http://localhost:5173/">Home</a>
                 <a href="http://localhost:5173/track">Dashboard</a>
