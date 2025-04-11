@@ -10,15 +10,21 @@ header {
 
 #logo {
     display: flex;
+    flex-direction: row;
     justify-content: flex-start;
+    align-items: center;
     width: 60%;
 }
 
-#logo a {
-   font-size: 20px; 
+#logo-image {
+    max-width: 30px;
+    max-height: 30px;
 }
 
-a {
-    color: black;
-    font-size: 14px;
+#logobtn {
+    font-size: 20px;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
