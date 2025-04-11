@@ -13,11 +13,6 @@
     [] display last-scraped data value for each competitor
     [] display competitor name for each competitor
 [] make the website responsive
-[] add a logo to the header that brings you back to the homepage
-    [x] design a logo
-    [x] generate png/svg/jpg whatever
-    [x] add to assets
-    [] link to header
 
 
 ## ------BACKEND------
@@ -60,3 +55,8 @@
     [x] side panel with name, email and email alerts toggle 
         - see: https://getbootstrap.com/docs/5.3/forms/checks-radios/ 
 [x] style homepage to match canva mockup
+[x] add a logo to the header that brings you back to the homepage
+    [x] design a logo
+    [x] generate png/svg/jpg whatever
+    [x] add to assets
+    [x] link to header
