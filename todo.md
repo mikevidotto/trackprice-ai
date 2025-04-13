@@ -7,6 +7,7 @@
 
 ## ------FRONTEND------
 
+[] find a better font
 [] dashboard functionality
     [] if no price changes have occured: show default 0%
     [] if price changes have occured, show the difference by a percentage
