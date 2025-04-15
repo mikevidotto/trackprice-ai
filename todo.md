@@ -4,10 +4,15 @@
 
 ## ------FOCUSED ITEMS------
 
+[] sort buttons don't work
+[] user name on side panel shows placeholder name
+[] dates are not populated correctly for last scraped or last change
+[] price data still shows placeholder prices.
+[] there is no option to enter a competitor name when adding a competitor
+[] email alerts toggle doesn't work.
 
 ## ------FRONTEND------
 
-[] find a better font
 [] dashboard functionality
     [] if no price changes have occured: show default 0%
     [] if price changes have occured, show the difference by a percentage
@@ -61,3 +66,4 @@
     [x] generate png/svg/jpg whatever
     [x] add to assets
     [x] link to header
+[x] find a better font
