@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-    config.LoadConfig()
+    config.LoadEnv()
 
 	dbURL := os.Getenv("DATABASE_URL")
 	db, err := sql.Open("postgres", dbURL)

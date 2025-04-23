@@ -3,26 +3,33 @@
 --------------------------------------------------
 
 ## ------FOCUSED ITEMS------
-
-[] sort buttons don't work
 [] user name on side panel shows placeholder name
-[] dates are not populated correctly for last scraped or last change
-[] price data still shows placeholder prices.
-[] there is no option to enter a competitor name when adding a competitor
-[] email alerts toggle doesn't work.
+    [x] create firstname and lastname fields for User model
+    [x] create firstname and lastname fields for User table
+    [x] create firstname and lastname form inputs on frontend when signing up.
+    [x] modify signup handler to accept a firstname and lastname.
+    [x] modify database function query to insert firstname and lastname
+    [] retrieve user data from the database to populate dashboard with name.
+        [] create a handler for retrieving user data
+        [] create database function to retreive user firstname and lastname
 
 ## ------FRONTEND------
 
+[] dates are not populated correctly for last scraped or last change
+[] price data still shows placeholder prices.
+[] email alerts toggle doesn't work.
 [] dashboard functionality
     [] if no price changes have occured: show default 0%
     [] if price changes have occured, show the difference by a percentage
     [] display last-scraped data value for each competitor
     [] display competitor name for each competitor
+[] sort buttons don't work
 [] make the website responsive
-
 
 ## ------BACKEND------
 
+[] there is no option to enter a competitor name when adding a competitor
+    [] add name to competitor data model so that you can send it to the frontend
 [] when a user's token expires and they navigate to the homepage, the token should be wiped to have login state change
     [] set middleware to check on homepage for token.
         [] if a token is in localstorage, check if it's valid
@@ -32,7 +39,6 @@
         [] set token expiry to 5 seconds
         [] login
         [] navigate to homepage
-[] add name to competitor data model so that you can send it to the frontend
 [] add firstname lastname to user data model so that you can send it to frontend /track
 [] internal/auth/models.go: move models to internal/models/models.go (SHOULD IT STAY?)
 

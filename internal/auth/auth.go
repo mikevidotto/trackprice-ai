@@ -18,7 +18,7 @@ import (
 var JWTSecretKey = os.Getenv("JWT_SECRET")
 
 // RegisterUser hashes the password and stores user in the database
-func RegisterUser(ctx context.Context, db *storage.MypostgresStorage, email, password string) error {
+func RegisterUser(ctx context.Context, db *storage.MypostgresStorage, email, password, firstname, lastname string) error {
 	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -26,8 +26,8 @@ func RegisterUser(ctx context.Context, db *storage.MypostgresStorage, email, pas
 	}
 
 	// Insert user into the database
-	query := `INSERT INTO users (email, password_hash) VALUES ($1, $2)`
-	_, err = db.DB.ExecContext(ctx, query, email, string(hashedPassword))
+	query := `INSERT INTO users (email, password_hash, firstname, lastname) VALUES ($1, $2, $3, $4)`
+	_, err = db.DB.ExecContext(ctx, query, email, string(hashedPassword), firstname, lastname)
 	if err != nil {
 		return fmt.Errorf("❌ Failed to register user: %v", err)
 	}

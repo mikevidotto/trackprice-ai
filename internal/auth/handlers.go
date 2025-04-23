@@ -8,6 +8,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func GetUser(db *storage.MypostgresStorage) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		// ✅ Extract user email from JWT
+		userData := c.Locals("user").(map[string]interface{})
+		userEmail := userData["email"].(string)
+		retrievedData, err := db.GetUserByEmail(context.Background(), userEmail)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		}
+        return c.JSON(fiber.Map{"userData": retrievedData})
+	}
+}
+
 // SignUpHandler registers a new user
 func SignUpHandler(db *storage.MypostgresStorage) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -17,7 +30,7 @@ func SignUpHandler(db *storage.MypostgresStorage) fiber.Handler {
 		}
 
 		// Call RegisterUser from auth.go
-		err := RegisterUser(context.Background(), db, req.Email, req.Password)
+		err := RegisterUser(context.Background(), db, req.Email, req.Password, req.Firstname, req.Lastname)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 		}
@@ -45,8 +58,8 @@ func LoginHandler(db *storage.MypostgresStorage) fiber.Handler {
 }
 
 func LogoutHandler(db *storage.MypostgresStorage) fiber.Handler {
-    return func(c *fiber.Ctx) error {
-        c.Locals("user", nil) 
-        return c.JSON(fiber.Map{"token": ""}) 
-    }
+	return func(c *fiber.Ctx) error {
+		c.Locals("user", nil)
+		return c.JSON(fiber.Map{"token": ""})
+	}
 }

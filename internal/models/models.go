@@ -4,13 +4,13 @@ import "time"
 
 // User model
 type User struct {
-	ID        int       `json:"id"`
-	Email     string    `json:"email"`
-	//Password  string    `json:"-"`
-	PasswordHash       string    `json:"-"`
-    //new
+	ID        int    `json:"id"`
+	Email     string `json:"email"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	PasswordHash string `json:"-"`
 	SubscriptionStatus string    `json:"subscription_status"`
-	CreatedAt time.Time `json:"created_at"`
+	CreatedAt          time.Time `json:"created_at"`
 }
 
 // Competitor model

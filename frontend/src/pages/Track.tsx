@@ -9,6 +9,8 @@ export default function Track() {
     const navigate = useNavigate();
     const [url, setUrl] = useState("");
     const [competitors, setCompetitors] = useState<any[]>([]);
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
 
     const submitCompetitor = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -55,9 +57,31 @@ export default function Track() {
                 }
             });
     }
+
+    function getUserData() {
+        API.get("http://localhost:8085/api/getuserdata")
+            .then((response) => {
+                if (response.data == null) {
+                    console.error("Error: cannot retrieve user...")
+                }
+                if (response.data != null) {
+                    setFirstname(response.data.userData.firstname)
+                    setLastname(response.data.userData.lastname)
+                }
+            })
+            .catch((error) => {
+                console.error("Error retrieving user data:", error);
+            });
+    }
+
     useEffect(
         getCompetitors, // <- function that will run on every dependency update
         [] // <-- empty dependency array
+    )
+
+    useEffect(
+        getUserData,
+        []
     )
 
     return (
@@ -66,7 +90,7 @@ export default function Track() {
                 <aside className="dashboard-side">
                     <div id="side-data">
                         <div id="user-data">
-                            <h4 id="username">Firstname Lastname</h4>
+                            <h4 id="username" >Hi, {(firstname)} {(lastname)}</h4>
                             <h6 id="email">mikevidotto@live.com</h6>
                         </div>
                         <div id="settings">

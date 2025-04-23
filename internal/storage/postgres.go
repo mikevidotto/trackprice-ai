@@ -62,8 +62,8 @@ func (s *MypostgresStorage) CreateUser(ctx context.Context, user models.User) (m
 // Fetch user by email
 func (s *MypostgresStorage) GetUserByEmail(ctx context.Context, email string) (models.User, error) {
 	var user models.User
-	query := "SELECT id, email, password_hash, created_at FROM users WHERE email = $1"
-	err := s.DB.QueryRowContext(ctx, query, email).Scan(&user.ID, &user.Email, &user.PasswordHash, &user.CreatedAt)
+	query := "SELECT id, email, firstname, lastname, created_at FROM users WHERE email = $1"
+	err := s.DB.QueryRowContext(ctx, query, email).Scan(&user.ID, &user.Email, &user.Firstname, &user.Lastname, &user.CreatedAt)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return models.User{}, errors.New("user not found")

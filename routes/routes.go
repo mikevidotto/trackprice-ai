@@ -20,6 +20,7 @@ func SetupRoutes(app *fiber.App, db *storage.MypostgresStorage) {
 
 	// Protected routes (Require JWT authentication)
 	authRoutes := app.Group("/api", middleware.AuthMiddleware())
+    authRoutes.Get("/getuserdata", auth.GetUser(db))
 	authRoutes.Post("/track", handlers.TrackCompetitorHandler(db))
 	authRoutes.Get("/tracked", handlers.ListTrackedCompetitorsHandler(db))
 //	authRoutes.Get("/changes", handlers.GetChangesHandler)

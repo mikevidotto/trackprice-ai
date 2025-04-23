@@ -7,7 +7,7 @@ import (
 )
 
 // LoadConfig reads .env file
-func LoadConfig() {
+func LoadEnv() {
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
