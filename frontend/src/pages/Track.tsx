@@ -9,6 +9,7 @@ export default function Track() {
     const navigate = useNavigate();
     const [url, setUrl] = useState("");
     const [competitors, setCompetitors] = useState<any[]>([]);
+    const [userData, setUserData] = useState({email:""})
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
 
@@ -65,8 +66,12 @@ export default function Track() {
                     console.error("Error: cannot retrieve user...")
                 }
                 if (response.data != null) {
+                    console.log(response.data.userData)
+                    setUserData(response.data.userData)
                     setFirstname(response.data.userData.firstname)
                     setLastname(response.data.userData.lastname)
+
+                    console.log(userData)
                 }
             })
             .catch((error) => {
@@ -91,7 +96,7 @@ export default function Track() {
                     <div id="side-data">
                         <div id="user-data">
                             <h4 id="username" >Hi, {(firstname)} {(lastname)}</h4>
-                            <h6 id="email">mikevidotto@live.com</h6>
+                            <h6 id="email">{(userData.email)}</h6>
                         </div>
                         <div id="settings">
                             <p>Email Alerts:</p>

@@ -73,3 +73,4 @@
     [x] retrieve user data from the database to populate dashboard with name.
         [x] create a handler for retrieving user data
         [x] create database function to retreive user firstname and lastname
+[x] change placeholder email to populate with user's actual email
