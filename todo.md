@@ -3,15 +3,6 @@
 --------------------------------------------------
 
 ## ------FOCUSED ITEMS------
-[] user name on side panel shows placeholder name
-    [x] create firstname and lastname fields for User model
-    [x] create firstname and lastname fields for User table
-    [x] create firstname and lastname form inputs on frontend when signing up.
-    [x] modify signup handler to accept a firstname and lastname.
-    [x] modify database function query to insert firstname and lastname
-    [] retrieve user data from the database to populate dashboard with name.
-        [] create a handler for retrieving user data
-        [] create database function to retreive user firstname and lastname
 
 ## ------FRONTEND------
 
@@ -73,3 +64,12 @@
     [x] add to assets
     [x] link to header
 [x] find a better font
+[x] user name on side panel shows placeholder name
+    [x] create firstname and lastname fields for User model
+    [x] create firstname and lastname fields for User table
+    [x] create firstname and lastname form inputs on frontend when signing up.
+    [x] modify signup handler to accept a firstname and lastname.
+    [x] modify database function query to insert firstname and lastname
+    [x] retrieve user data from the database to populate dashboard with name.
+        [x] create a handler for retrieving user data
+        [x] create database function to retreive user firstname and lastname
