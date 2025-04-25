@@ -8,19 +8,16 @@ import moment from 'moment';
 export default function Track() {
     const navigate = useNavigate();
     const [url, setUrl] = useState("");
+    const [competitorname, setName] = useState("");
     const [competitors, setCompetitors] = useState<any[]>([]);
-    const [userData, setUserData] = useState({email:""})
-    const [firstname, setFirstname] = useState("");
-    const [lastname, setLastname] = useState("");
+    const [userData, setUserData] = useState({ email: "", firstname:"", lastname:"" })
 
     const submitCompetitor = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await API.post('/api/track', { "url": url })
+            await API.post('/api/track', { "url": url, "competitor_name": competitorname })
                 .then(() => {
-                    console.log("WE ADDED A TRACKER.")
                     getCompetitors()
-                    console.log("WE ARE AFTER getCompetitors")
                 },
                     (error) => {
                         var status = error.response.status
@@ -66,12 +63,7 @@ export default function Track() {
                     console.error("Error: cannot retrieve user...")
                 }
                 if (response.data != null) {
-                    console.log(response.data.userData)
                     setUserData(response.data.userData)
-                    setFirstname(response.data.userData.firstname)
-                    setLastname(response.data.userData.lastname)
-
-                    console.log(userData)
                 }
             })
             .catch((error) => {
@@ -95,7 +87,7 @@ export default function Track() {
                 <aside className="dashboard-side">
                     <div id="side-data">
                         <div id="user-data">
-                            <h4 id="username" >Hi, {(firstname)} {(lastname)}</h4>
+                            <h4 id="username" >Hi, {(userData.firstname)} {(userData.lastname)}</h4>
                             <h6 id="email">{(userData.email)}</h6>
                         </div>
                         <div id="settings">
@@ -118,7 +110,7 @@ export default function Track() {
                         return <div className="competitor-box" key={competitors.id}>
                             <div id="box-data">
                                 <div id="comp-label">
-                                    Competitor
+                                    {(competitors.competitor_name)} 
                                 </div>
                                 <div id="comp-url">
                                     {(competitors.competitor_url)}
@@ -153,7 +145,7 @@ export default function Track() {
                                     Last Scraped
                                 </div>
                                 <div id="comp-last-scraped">
-                                    Mar 8
+                                    {moment(competitors.last_scraped_data).format("MMM D")}
                                 </div>
                             </div>
                             <div id="box-data">
@@ -168,7 +160,14 @@ export default function Track() {
                     })}
                     <div className="submit-competitor-box">
                         <form id="competitor-form" onSubmit={submitCompetitor}>
-                            <label htmlFor="url">Competitor Url: </label>
+                            <label htmlFor="name">Name: </label>
+                            <input
+                                id="name"
+                                type="name"
+                                value={competitorname}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                            <label htmlFor="url">Url: </label>
                             <input
                                 id="url"
                                 type="url"

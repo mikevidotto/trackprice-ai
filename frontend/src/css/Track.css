@@ -90,6 +90,7 @@ hr {
     padding-right: 10px;
     border-radius: 7px;
     color: #444;
+    border: 0.5px solid #fff;
 }
 
 .submit-competitor-box:hover {
@@ -107,6 +108,7 @@ hr {
     padding-right: 10px;
     border-radius: 7px;
     color: #444;
+    border: 0.5px solid #fff;
 }
 
 .competitor-box:hover {
@@ -118,10 +120,12 @@ hr {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    border: 0.5px solid #fff;
 }
 
 #competitor-form label {
     padding-right: 5px;
+    padding-left: 10px;
 }
 
 #competitor-form input {

@@ -14,6 +14,23 @@ var planLimits = map[string]int{
 	"business": 100, // Business users get unlimited
 }
 
+func GetLatestChanges(db *storage.MypostgresStorage) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		var data struct {
+			URL string `json:"url"`
+		}
+		if err := c.BodyParser(&data); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request payload"})
+		}
+
+		latestprices, err := db.GetLatestPrices(context.Background(), data.URL)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to get latest prices"})
+		}
+		return c.JSON(latestprices)
+	}
+}
+
 // TrackCompetitorHandler allows users to track a competitor
 func TrackCompetitorHandler(db *storage.MypostgresStorage) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -36,7 +53,8 @@ func TrackCompetitorHandler(db *storage.MypostgresStorage) fiber.Handler {
 		}
 
 		var data struct {
-			URL string `json:"url"`
+			URL  string `json:"url"`
+			NAME string `json:"competitor_name"`
 		}
 		if err := c.BodyParser(&data); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request payload"})
@@ -47,7 +65,7 @@ func TrackCompetitorHandler(db *storage.MypostgresStorage) fiber.Handler {
 		err = db.DB.QueryRowContext(context.Background(), `SELECT id FROM competitors WHERE url = $1`, data.URL).Scan(&competitorID)
 		if err == sql.ErrNoRows {
 			// ✅ Insert competitor globally
-			err = db.DB.QueryRowContext(context.Background(), `INSERT INTO competitors (url) VALUES ($1) RETURNING id`, data.URL).Scan(&competitorID)
+			err = db.DB.QueryRowContext(context.Background(), `INSERT INTO competitors (url, competitor_name) VALUES ($1, $2) RETURNING id`, data.URL, data.NAME).Scan(&competitorID)
 			if err != nil {
 				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to insert competitor"})
 			}
@@ -71,7 +89,7 @@ func ListTrackedCompetitorsHandler(db *storage.MypostgresStorage) fiber.Handler 
 		user := c.Locals("user").(map[string]interface{})
 		userID := int(user["user_id"].(float64))
 
-		query := `SELECT tc.id, c.url, tc.created_at FROM tracked_competitors tc
+		query := `SELECT tc.id, c.url, c.competitor_name, tc.created_at FROM tracked_competitors tc
                   JOIN competitors c ON tc.competitor_id = c.id WHERE tc.user_id = $1`
 		rows, err := db.DB.QueryContext(context.Background(), query, userID)
 		if err != nil {
@@ -82,12 +100,13 @@ func ListTrackedCompetitorsHandler(db *storage.MypostgresStorage) fiber.Handler 
 		var competitors []fiber.Map
 		for rows.Next() {
 			var id int
-			var url, createdAt string
-			rows.Scan(&id, &url, &createdAt)
+			var url, name, createdAt string
+			rows.Scan(&id, &url, &name, &createdAt)
 			competitors = append(competitors, fiber.Map{
-				"id":             id,
-				"competitor_url": url,
-				"created_at":     createdAt,
+				"id":              id,
+				"competitor_url":  url,
+				"competitor_name": name,
+				"created_at":      createdAt,
 			})
 		}
 

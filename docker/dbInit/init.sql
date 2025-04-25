@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE competitors (
     id SERIAL PRIMARY KEY,
+    competitor_name VARCHAR(50),
     url TEXT UNIQUE NOT NULL,
     last_scraped_data TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

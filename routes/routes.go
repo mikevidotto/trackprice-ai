@@ -24,6 +24,7 @@ func SetupRoutes(app *fiber.App, db *storage.MypostgresStorage) {
 	authRoutes.Post("/track", handlers.TrackCompetitorHandler(db))
 	authRoutes.Get("/tracked", handlers.ListTrackedCompetitorsHandler(db))
 //	authRoutes.Get("/changes", handlers.GetChangesHandler)
+    authRoutes.Get("/latest", handlers.GetLatestChanges(db))
 	authRoutes.Post("/subscribe", handlers.SubscribeHandler)
 	authRoutes.Post("/cancel", handlers.CancelSubscription(db))
 

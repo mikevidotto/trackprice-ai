@@ -4,23 +4,24 @@
 
 ## ------FOCUSED ITEMS------
 
+[] display last-scraped data value for each competitor
+[] YOU WERE IMPLEMENTING THE AUTOMATIC SCRAPING SYSTEM?!?!?!??!?!??!?!?!? FIGURE OUT HOW TO HANDLE THIS IN THE BACKGROUND
+[] TEST SCRAPING DATA UPDATING ON THE DASHBOARD WITH NEW SCRAPING DATA AND UPDATED LASTSCRAPED DATE
+
 ## ------FRONTEND------
 
-[] dates are not populated correctly for last scraped or last change
-[] price data still shows placeholder prices.
-[] email alerts toggle doesn't work.
-[] dashboard functionality
+[] update/modify dashboard functionality
+    [] dates are not populated correctly for last scraped or last change
+    [] price data still shows placeholder prices.
+    [] email alerts toggle doesn't work.
     [] if no price changes have occured: show default 0%
     [] if price changes have occured, show the difference by a percentage
-    [] display last-scraped data value for each competitor
     [] display competitor name for each competitor
-[] sort buttons don't work
+    [] sort buttons don't work
 [] make the website responsive
 
 ## ------BACKEND------
 
-[] there is no option to enter a competitor name when adding a competitor
-    [] add name to competitor data model so that you can send it to the frontend
 [] when a user's token expires and they navigate to the homepage, the token should be wiped to have login state change
     [] set middleware to check on homepage for token.
         [] if a token is in localstorage, check if it's valid
@@ -30,7 +31,6 @@
         [] set token expiry to 5 seconds
         [] login
         [] navigate to homepage
-[] add firstname lastname to user data model so that you can send it to frontend /track
 [] internal/auth/models.go: move models to internal/models/models.go (SHOULD IT STAY?)
 
 
@@ -74,3 +74,5 @@
         [x] create a handler for retrieving user data
         [x] create database function to retreive user firstname and lastname
 [x] change placeholder email to populate with user's actual email
+[x] there is no option to enter a competitor name when adding a competitor
+    [x] add name to competitor data model so that you can send it to the frontend
